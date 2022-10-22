@@ -1,0 +1,46 @@
+apply plugin: 'spring-cloud-contract'
+
+dependencies {
+    implementation project.parent.project("domain")
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+
+    implementation group: 'org.springframework.retry', name: 'spring-retry'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth'
+
+    implementation group: 'javax.xml.bind', name: 'jaxb-api'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-core'
+    implementation group: 'javax.activation', name: 'activation'
+    implementation group: 'mysql', name: 'mysql-connector-java'
+    implementation group: 'com.zaxxer', name: 'HikariCP'
+    implementation group: 'commons-codec', name: 'commons-codec'
+
+    implementation group: 'io.springfox', name: 'springfox-swagger2'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui'
+
+    compileOnly("org.projectlombok:lombok")
+
+    annotationProcessor("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+
+    //testImplementation group: 'org.junit.platform', name: 'junit-platform-runner',  version: rootProject.version_junit5_suite
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-stub-runner'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-verifier'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-contract-wiremock'
+
+    testImplementation files("${project.rootDir}/payment-api/infra/build/libs/infra-stubs.jar")
+}
+
+tasks.copyContracts.dependsOn rootProject.tasks.findByPath('computation-api:infra:verifierStubsJar')
+tasks.generateClientStubs.dependsOn rootProject.tasks.findByPath('computation-api:infra:verifierStubsJar')
+tasks.generateContractTests.dependsOn rootProject.tasks.findByPath('computation-api:infra:verifierStubsJar')
+tasks.test.dependsOn rootProject.tasks.findByPath('computation-api:infra:verifierStubsJar')
+tasks.compileTestJava.dependsOn rootProject.tasks.findByPath('computation-api:infra:verifierStubsJar')
+tasks.processContractTestResources.dependsOn rootProject.tasks.findByPath('computation-api:infra:generateContractTests')
+tasks.compileTestJava.dependsOn rootProject.tasks.findByPath('computation-api:infra:generateContractTests')
+

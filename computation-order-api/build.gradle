@@ -1,0 +1,21 @@
+description = 'Computation Order API'
+jar.archiveBaseName.set('computation-order-api')
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project('infra')
+}
+
+springBoot {
+    mainClassName = 'com.nixrstudios.computationorderapi.ComputationOrderApiApplication'
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}
+
+build {
+    dependsOn 'domain:build', 'infra:build'
+}

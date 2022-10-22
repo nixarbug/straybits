@@ -1,0 +1,11 @@
+rootProject.name = 'straybits'
+include 'computation-order-api'
+include 'computation-order-api:domain'
+include 'computation-order-api:infra'
+
+include 'computation-api'
+include 'computation-api:domain'
+include 'computation-api:infra'
+
+include 'acceptance-test-suite'
+

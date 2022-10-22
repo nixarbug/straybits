@@ -1,0 +1,22 @@
+description = 'Payment API'
+jar.archiveBaseName.set('payment-api')
+
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation project('infra')
+}
+
+springBoot {
+    mainClassName = 'com.nixrstudios.computationapi.ComputationApiApplication'
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}
+
+build {
+    dependsOn 'domain:build', 'infra:build'
+}
